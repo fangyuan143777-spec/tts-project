@@ -62,5 +62,5 @@ desktop.ini
 .idea/
 .vscode/
 
-# Claude Code local settings
-.claude/settings.local.json
+# Claude Code local settings (including temporary variants like settings.local.json.tmp.123.abc)
+.claude/settings.local.json*
