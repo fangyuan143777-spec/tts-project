@@ -81,7 +81,22 @@ table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e1e4ea; vertical-align: top; }
 td.ok { color: #1e5c2e; font-weight: 600; }
 td.bad { color: #8a1c1c; font-weight: 600; }
+/* ---- Admin dashboard (Phase 3) ---- */
+.card.admin { max-width: 1000px; margin: 4vh auto; }
+.nav { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 12px 0; padding: 8px 0; border-top: 1px solid #dde; border-bottom: 1px solid #dde; }
+.nav a { color: #2457c5; text-decoration: none; font-weight: 600; }
+.nav a:hover { text-decoration: underline; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.stat { display: flex; flex-direction: column; padding: 14px; background: #f4f6f8; border: 1px solid #dde; border-radius: 6px; }
+.stat-number { font-size: 1.6rem; font-weight: 700; }
+.stat-label { font-size: 0.85rem; color: #555; }
+button.small { margin-top: 0; padding: 4px 10px; font-size: 0.9rem; }
+button.danger { background: #b3261e; }
+.note { font-weight: 400; font-size: 0.8rem; color: #8a1c1c; }
+details summary { cursor: pointer; color: #2457c5; }
+.full-text { margin-top: 4px; max-width: 340px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
 @media (max-width: 480px) {
-  .card, .card.wide { margin: 0; border-radius: 0; }
+  .card, .card.wide, .card.admin { margin: 0; border-radius: 0; }
   .actions button, .actions .button { flex: 1 1 45%; }
 }

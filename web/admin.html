@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin - TTS Project</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<!-- hidden until auth.js confirms a valid, enabled ADMIN session -->
+<body data-page="admin" hidden>
+  <main class="card admin">
+    <header class="topbar">
+      <h1>Admin Dashboard</h1>
+      <div class="userbox">
+        <span><strong id="user-email"></strong> (<span id="user-role"></span>)</span>
+        <button id="logout-btn" type="button" class="secondary">Log out</button>
+      </div>
+    </header>
+
+    <nav class="nav" aria-label="Admin navigation">
+      <a href="#dashboard">Dashboard</a>
+      <a href="#users">Users</a>
+      <a href="#history">TTS History</a>
+      <a href="app.html">Back to App</a>
+    </nav>
+
+    <div id="message" class="message" hidden role="alert"></div>
+
+    <section id="dashboard" aria-labelledby="dashboard-title">
+      <h2 id="dashboard-title">Dashboard</h2>
+      <div class="stat-grid">
+        <div class="stat"><span class="stat-number" id="stat-users">…</span><span class="stat-label">Total Users</span></div>
+        <div class="stat"><span class="stat-number" id="stat-total">…</span><span class="stat-label">Total TTS Generations</span></div>
+        <div class="stat"><span class="stat-number" id="stat-today">…</span><span class="stat-label">Generations Today (UTC)</span></div>
+        <div class="stat"><span class="stat-number" id="stat-chars">…</span><span class="stat-label">Total Characters</span></div>
+        <div class="stat"><span class="stat-number" id="stat-failed">…</span><span class="stat-label">Failed Generations</span></div>
+      </div>
+    </section>
+
+    <section id="users" aria-labelledby="users-title">
+      <h2 id="users-title">Registered users</h2>
+      <p class="hint">You can enable or disable normal users. Admin accounts cannot be changed here.</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Email</th><th>Role</th><th>Status</th><th>Created</th><th>Action</th></tr>
+          </thead>
+          <tbody id="users-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="history" aria-labelledby="history-title">
+      <h2 id="history-title">TTS history (latest 100, all users)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>User</th><th>Language</th><th>Voice</th><th>Chars</th><th>Status</th><th>Text</th></tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+      <p class="hint" id="history-empty" hidden>No TTS history yet.</p>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

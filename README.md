@@ -2,7 +2,7 @@
 
 A school project: a web app where registered users turn text into speech using the ElevenLabs API, with an administrator dashboard for the professor.
 
-## Current status: Phase 2 (text-to-speech) in review
+## Current status: Phase 3 (admin dashboard) in review
 
 Done in Phase 1:
 - Supabase database: `profiles` and `tts_requests` tables, signup trigger, Row Level Security
@@ -15,7 +15,11 @@ Done in Phase 2:
 - `app.html`: language and voice selection, text box with counter, Generate, player (Play, Pause, Resume, Stop, volume), MP3 download, Clear, and your own history
 - Limits enforced on the server: 1,000 characters per request and 20 successful generations per user per UTC day
 
-Not built yet (later phases): admin dashboard, appearance settings (dark mode, font size/type), deployment.
+Done in Phase 3:
+- `admin.html`: admin dashboard with statistics (total users, total generations, generations today (UTC), total characters, failed generations), a list of registered users with Enable/Disable buttons, and the latest 100 TTS records from all users (with a "View text" toggle)
+- Only admins can open it; normal users are sent back to `app.html`, and visitors who are not logged in are sent to the login page
+
+Not built yet (later phases): appearance settings (dark mode, font size/type), deployment.
 
 ## Technology
 
@@ -51,6 +55,7 @@ Security rules (RLS), in plain words:
 - A user can read only their own profile and their own `tts_requests`.
 - An admin can read everyone's profiles and requests, and can enable/disable other users.
 - Nobody can change a `role` from the browser. The browser can never insert, update or delete `tts_requests`; only the server will.
+- Admin dashboard: an admin can enable/disable normal users (`role = 'user'`) only. Admins cannot disable themselves or other admins, and nobody can change a role from the browser.
 - The first admin is set manually by the project owner in the Supabase SQL Editor:
   `update public.profiles set role = 'admin' where email = 'you@example.com';`
 
@@ -82,11 +87,13 @@ web/
   index.html               login
   register.html            registration
   app.html                 protected page: text-to-speech, player, history
+  admin.html               admin dashboard (admins only)
   css/style.css
   js/config.js             public Supabase URL + key
   js/supabaseClient.js
   js/auth.js               register / login / logout / page protection
   js/tts.js                language/voice, generate, player, download, history
+  js/admin.js              admin statistics, users, all history
 supabase/
   migrations/              database SQL
   functions/generate-speech/index.ts   the Edge Function

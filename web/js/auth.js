@@ -88,8 +88,10 @@ async function initAuthPage(page) {
   });
 }
 
-// ---- Protected page (app.html) ----------------------------------------------
-async function initProtectedPage() {
+// ---- Protected pages (app.html, admin.html) ---------------------------------
+// requireAdmin = true for admin.html. The role is read from Supabase every time
+// (never from localStorage), and the data on admin.html is protected by RLS anyway.
+async function initProtectedPage(requireAdmin) {
   const { data } = await sb.auth.getSession();
   if (!data.session) {
     window.location.replace("index.html");
@@ -99,6 +101,16 @@ async function initProtectedPage() {
   const profile = await getMyProfile(data.session.user.id);
   if (!profile) return signOutAndRedirect("profile");
   if (profile.is_disabled) return signOutAndRedirect("disabled");
+
+  // Normal users who open the admin page are sent back to the normal app.
+  if (requireAdmin && profile.role !== "admin") {
+    window.location.replace("app.html");
+    return;
+  }
+
+  // Admins get a link to the dashboard on the normal app page.
+  const adminLink = document.getElementById("admin-link");
+  if (adminLink && profile.role === "admin") adminLink.hidden = false;
 
   document.getElementById("user-email").textContent = profile.email;
   document.getElementById("user-role").textContent = profile.role;
@@ -113,5 +125,6 @@ async function initProtectedPage() {
 }
 
 const page = document.body.dataset.page;
-if (page === "app") initProtectedPage();
+if (page === "app") initProtectedPage(false);
+else if (page === "admin") initProtectedPage(true);
 else initAuthPage(page);
