@@ -3,26 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Register - TTS Project</title>
+  <meta name="description" content="Sonara Voice turns your text into natural speech. Give your words a voice.">
+  <meta name="theme-color" content="#2e2a85">
+  <title>Create account · Sonara Voice</title>
+  <link rel="icon" type="image/svg+xml" href="img/logo.svg">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/appearance.js"></script>
 </head>
 <body data-page="register">
-  <main class="card">
-    <h1>Register</h1>
-    <div id="message" class="message" hidden role="alert"></div>
-    <form id="auth-form">
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" required autocomplete="email">
-      <label for="password">Password (min 6 characters)</label>
-      <input id="password" name="password" type="password" required minlength="6" autocomplete="new-password">
-      <label for="confirm">Confirm password</label>
-      <input id="confirm" name="confirm" type="password" required minlength="6" autocomplete="new-password">
-      <button type="submit">Create account</button>
-    </form>
-    <p class="switch">Already registered? <a href="index.html">Log in</a></p>
-    <div id="appearance-panel"></div>
-  </main>
+  <div class="auth-layout">
+    <aside class="auth-hero">
+      <a class="brand" href="index.html" aria-label="Sonara Voice - log in">
+        <img class="brand-mark" src="img/logo.svg" alt="" width="34" height="34">
+        <span class="brand-name">Sonara</span>
+      </a>
+
+      <div>
+        <p class="hero-title">Give your words a voice.</p>
+        <p class="hero-lead">Sonara Voice turns any text into clear, natural speech in five languages. Listen right away and download the audio.</p>
+
+        <div class="hero-extra">
+          <div class="flow" aria-hidden="true">
+            <span class="flow-chip">Aa&nbsp;Hello</span>
+            <span class="flow-arrow"></span>
+            <span class="flow-wave"></span>
+            <span class="flow-arrow"></span>
+            <span class="flow-chip">Voice</span>
+          </div>
+          <ul class="hero-points">
+            <li class="ico i-globe">English, Filipino, Spanish, Japanese and Chinese</li>
+            <li class="ico i-play">Listen instantly in your browser</li>
+            <li class="ico i-download">Download your audio as MP3</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="hero-foot hero-extra">Sonara Voice &middot; A text-to-speech school project</p>
+    </aside>
+
+    <main class="auth-panel">
+      <div class="auth-card">
+        <h1>Create your account</h1>
+        <p class="subtle">Start turning text into speech with Sonara Voice.</p>
+
+        <div id="message" class="message" hidden role="alert"></div>
+
+        <form id="auth-form">
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email">
+          </div>
+          <div class="field">
+            <label for="password">Password (min 6 characters)</label>
+            <input id="password" name="password" type="password" required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="field">
+            <label for="confirm">Confirm password</label>
+            <input id="confirm" name="confirm" type="password" required minlength="6" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn-block">Create account</button>
+        </form>
+
+        <p class="switch">Already registered? <a href="index.html">Log in</a></p>
+        <div id="appearance-panel" class="appearance-slot"></div>
+      </div>
+    </main>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/supabaseClient.js"></script>

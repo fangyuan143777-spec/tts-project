@@ -3,70 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>App - TTS Project</title>
+  <meta name="description" content="Sonara Voice turns your text into natural speech. Give your words a voice.">
+  <meta name="theme-color" content="#2e2a85">
+  <title>Studio · Sonara Voice</title>
+  <link rel="icon" type="image/svg+xml" href="img/logo.svg">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/appearance.js"></script>
 </head>
 <!-- hidden until auth.js confirms there is a valid, enabled session -->
 <body data-page="app" hidden>
-  <main class="card wide">
-    <header class="topbar">
-      <h1>TTS Project</h1>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="app.html" aria-label="Sonara Voice - studio">
+        <img class="brand-mark" src="img/logo.svg" alt="" width="34" height="34">
+        <span class="brand-name">Sonara</span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="app.html" class="ico i-wave" aria-current="page">Studio</a>
+        <a id="admin-link" href="admin.html" class="ico i-shield" hidden>Admin</a>
+      </nav>
       <div class="userbox">
-        <span><strong id="user-email"></strong> (<span id="user-role"></span>)</span>
-        <a id="admin-link" class="button secondary" href="admin.html" hidden>Admin Dashboard</a>
-        <button id="logout-btn" type="button" class="secondary">Log out</button>
+        <span class="user-chip ico i-user"><strong id="user-email"></strong> <span id="user-role" class="role-badge"></span></span>
+        <button id="logout-btn" type="button" class="secondary ico i-logout">Log out</button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <div id="appearance-panel"></div>
+  <main class="container">
+    <div id="appearance-panel" class="appearance-slot"></div>
 
-    <section aria-labelledby="gen-title">
-      <h2 id="gen-title">Text to speech</h2>
+    <div class="page-title">
+      <h1>Give your words a voice.</h1>
+      <p>Write or paste your text, choose a language, and listen in seconds.</p>
+    </div>
+
+    <section class="card" aria-labelledby="gen-title">
+      <div class="card-head">
+        <h2 id="gen-title" class="ico i-wave">Create speech</h2>
+      </div>
+
+      <label for="text" class="field-label"><span class="step" aria-hidden="true">1</span>Your text</label>
+      <textarea id="text" rows="8" maxlength="1000" placeholder="Type or paste the text you want to hear, in the language you choose below."></textarea>
+      <div class="meta-row">
+        <p class="counter" id="counter" aria-live="polite">0 / 1000 characters · 0 words</p>
+        <p class="hint">Up to 1,000 characters per request</p>
+      </div>
 
       <div class="row">
         <div class="field">
-          <label for="language">Language</label>
+          <label for="language" class="field-label"><span class="step" aria-hidden="true">2</span>Language</label>
           <select id="language"></select>
         </div>
         <div class="field">
-          <label for="voice">Voice</label>
+          <label for="voice" class="field-label"><span class="step" aria-hidden="true">2</span>Voice</label>
           <select id="voice"></select>
         </div>
       </div>
 
-      <label for="text">Text to speak</label>
-      <textarea id="text" rows="6" maxlength="1000" placeholder="Type or paste the text here, in the language you chose."></textarea>
-      <p class="counter" id="counter" aria-live="polite">0 / 1000 characters · 0 words</p>
-
       <div class="actions">
-        <button id="generate-btn" type="button" disabled>Generate Speech</button>
-        <button id="clear-btn" type="button" class="secondary">Clear</button>
+        <button id="generate-btn" type="button" class="btn-generate ico i-wave" disabled>Generate Speech</button>
+        <button id="clear-btn" type="button" class="secondary ico i-x">Clear</button>
       </div>
 
       <div id="message" class="message" hidden role="alert"></div>
     </section>
 
-    <section aria-labelledby="player-title">
-      <h2 id="player-title">Player</h2>
+    <section class="card player-card" aria-labelledby="player-title">
+      <div class="card-head">
+        <h2 id="player-title"><span class="step" aria-hidden="true">3</span><span class="when-idle">Listen &amp; download</span><span class="when-ready">Your audio is ready</span></h2>
+        <p id="player-status" class="player-status" aria-live="polite">Generate speech to enable the player.</p>
+      </div>
+
+      <div class="wave-deco" aria-hidden="true"></div>
       <!-- No native controls: our own buttons below control this element. -->
       <audio id="player" preload="auto"></audio>
-      <div class="actions">
-        <button id="play-btn" type="button" disabled>Play</button>
-        <button id="pause-btn" type="button" disabled>Pause</button>
-        <button id="resume-btn" type="button" disabled>Resume</button>
-        <button id="stop-btn" type="button" disabled>Stop</button>
-        <a id="download-btn" class="button secondary" href="#" download="speech.mp3" hidden>Download MP3</a>
+
+      <div class="controls">
+        <button id="play-btn" type="button" class="ico i-play" disabled>Play</button>
+        <button id="pause-btn" type="button" class="secondary ico i-pause" disabled>Pause</button>
+        <button id="resume-btn" type="button" class="secondary ico i-resume" disabled>Resume</button>
+        <button id="stop-btn" type="button" class="secondary ico i-stop" disabled>Stop</button>
       </div>
-      <div class="volume">
-        <label for="volume">Volume: <span id="volume-value">100</span>%</label>
-        <input id="volume" type="range" min="0" max="100" value="100">
+
+      <div class="player-foot">
+        <div class="volume">
+          <label for="volume" class="ico i-volume"><span>Volume <span id="volume-value">100</span>%</span></label>
+          <input id="volume" type="range" min="0" max="100" value="100">
+        </div>
+        <a id="download-btn" class="button btn-accent ico i-download" href="#" download="speech.mp3" hidden>Download MP3</a>
       </div>
-      <p class="hint" id="player-status">Generate speech to enable the player.</p>
     </section>
 
-    <section aria-labelledby="history-title">
-      <h2 id="history-title">Your history</h2>
+    <section class="card" aria-labelledby="history-title">
+      <div class="card-head">
+        <h2 id="history-title" class="ico i-history">Recent speech</h2>
+      </div>
       <p class="hint">Audio is not saved. To hear an old entry again, generate it again.</p>
       <div class="table-wrap">
         <table id="history-table">
@@ -76,9 +107,10 @@
           <tbody id="history-body"></tbody>
         </table>
       </div>
-      <p class="hint" id="history-empty" hidden>No history yet.</p>
+      <p class="empty-state" id="history-empty" hidden>No history yet.</p>
     </section>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/supabaseClient.js"></script>

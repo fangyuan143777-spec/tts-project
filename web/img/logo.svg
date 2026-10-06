@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sonara logo">
+  <title>Sonara</title>
+  <!-- speech bubble with a small tail at the bottom left -->
+  <path fill="#5457ee" d="M18 6H46A12 12 0 0 1 58 18V34A12 12 0 0 1 46 46H34L22 58V46H18A12 12 0 0 1 6 34V18A12 12 0 0 1 18 6Z"/>
+  <!-- five sound-wave bars: the middle one is the teal accent -->
+  <rect x="17" y="22" width="4" height="8"  rx="2" fill="#ffffff"/>
+  <rect x="23" y="18" width="4" height="16" rx="2" fill="#ffffff"/>
+  <rect x="30" y="13" width="4" height="26" rx="2" fill="#5eead4"/>
+  <rect x="37" y="18" width="4" height="16" rx="2" fill="#ffffff"/>
+  <rect x="43" y="22" width="4" height="8"  rx="2" fill="#ffffff"/>
+</svg>

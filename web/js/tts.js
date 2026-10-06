@@ -77,6 +77,7 @@
   function updateGenerateButton() {
     const trimmedLength = textBox.value.trim().length;
     generateBtn.disabled = busy || trimmedLength === 0 || textBox.value.length > cfg.MAX_CHARS;
+    generateBtn.setAttribute("aria-busy", String(busy)); // lets the CSS show a spinner while generating
   }
 
   // ---- Generate -------------------------------------------------------------

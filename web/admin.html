@@ -3,48 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin - TTS Project</title>
+  <meta name="description" content="Sonara Voice administration: statistics, users and speech history.">
+  <meta name="theme-color" content="#2e2a85">
+  <title>Admin · Sonara Voice</title>
+  <link rel="icon" type="image/svg+xml" href="img/logo.svg">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/appearance.js"></script>
 </head>
 <!-- hidden until auth.js confirms a valid, enabled ADMIN session -->
 <body data-page="admin" hidden>
-  <main class="card admin">
-    <header class="topbar">
-      <h1>Admin Dashboard</h1>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="admin.html" aria-label="Sonara Voice - admin dashboard">
+        <img class="brand-mark" src="img/logo.svg" alt="" width="34" height="34">
+        <span class="brand-name">Sonara</span>
+      </a>
+      <span class="admin-badge">Admin</span>
+      <nav class="site-nav" aria-label="Admin navigation">
+        <a href="#dashboard" class="ico i-grid" aria-current="page">Dashboard</a>
+        <a href="#users" class="ico i-users">Users</a>
+        <a href="#history" class="ico i-history">TTS History</a>
+        <a href="app.html" class="ico i-arrow-left">Back to App</a>
+      </nav>
       <div class="userbox">
-        <span><strong id="user-email"></strong> (<span id="user-role"></span>)</span>
-        <button id="logout-btn" type="button" class="secondary">Log out</button>
+        <span class="user-chip ico i-user"><strong id="user-email"></strong> <span id="user-role" class="role-badge"></span></span>
+        <button id="logout-btn" type="button" class="secondary ico i-logout">Log out</button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <div id="appearance-panel"></div>
+  <main class="container wide">
+    <div id="appearance-panel" class="appearance-slot"></div>
 
-    <nav class="nav" aria-label="Admin navigation">
-      <a href="#dashboard">Dashboard</a>
-      <a href="#users">Users</a>
-      <a href="#history">TTS History</a>
-      <a href="app.html">Back to App</a>
-    </nav>
+    <div class="page-title">
+      <h1>Admin dashboard</h1>
+      <p>Usage statistics, registered users and speech history for Sonara Voice.</p>
+    </div>
 
     <div id="message" class="message" hidden role="alert"></div>
 
-    <section id="dashboard" aria-labelledby="dashboard-title">
-      <h2 id="dashboard-title">Dashboard</h2>
+    <section id="dashboard" class="card" aria-labelledby="dashboard-title">
+      <div class="card-head">
+        <h2 id="dashboard-title" class="ico i-grid">Dashboard</h2>
+      </div>
       <div class="stat-grid">
-        <div class="stat"><span class="stat-number" id="stat-users">…</span><span class="stat-label">Total Users</span></div>
-        <div class="stat"><span class="stat-number" id="stat-total">…</span><span class="stat-label">Total TTS Generations</span></div>
-        <div class="stat"><span class="stat-number" id="stat-today">…</span><span class="stat-label">Generations Today (UTC)</span></div>
-        <div class="stat"><span class="stat-number" id="stat-chars">…</span><span class="stat-label">Total Characters</span></div>
-        <div class="stat"><span class="stat-number" id="stat-failed">…</span><span class="stat-label">Failed Generations</span></div>
+        <div class="stat"><span class="stat-icon ico i-users" aria-hidden="true"></span><span class="stat-number" id="stat-users">…</span><span class="stat-label">Total Users</span></div>
+        <div class="stat"><span class="stat-icon ico i-wave" aria-hidden="true"></span><span class="stat-number" id="stat-total">…</span><span class="stat-label">Total TTS Generations</span></div>
+        <div class="stat"><span class="stat-icon ico i-calendar" aria-hidden="true"></span><span class="stat-number" id="stat-today">…</span><span class="stat-label">Generations Today (UTC)</span></div>
+        <div class="stat"><span class="stat-icon ico i-type" aria-hidden="true"></span><span class="stat-number" id="stat-chars">…</span><span class="stat-label">Total Characters</span></div>
+        <div class="stat is-failed"><span class="stat-icon ico i-alert" aria-hidden="true"></span><span class="stat-number" id="stat-failed">…</span><span class="stat-label">Failed Generations</span></div>
       </div>
     </section>
 
-    <section id="users" aria-labelledby="users-title">
-      <h2 id="users-title">Registered users</h2>
+    <section id="users" class="card" aria-labelledby="users-title">
+      <div class="card-head">
+        <h2 id="users-title" class="ico i-users">Registered users</h2>
+      </div>
       <p class="hint">You can enable or disable normal users. Admin accounts cannot be changed here.</p>
       <div class="table-wrap">
-        <table>
+        <table id="users-table">
           <thead>
             <tr><th>Email</th><th>Role</th><th>Status</th><th>Created</th><th>Action</th></tr>
           </thead>
@@ -53,19 +70,22 @@
       </div>
     </section>
 
-    <section id="history" aria-labelledby="history-title">
-      <h2 id="history-title">TTS history (latest 100, all users)</h2>
+    <section id="history" class="card" aria-labelledby="history-title">
+      <div class="card-head">
+        <h2 id="history-title" class="ico i-history">TTS history (latest 100, all users)</h2>
+      </div>
       <div class="table-wrap">
-        <table>
+        <table id="admin-history-table">
           <thead>
             <tr><th>Date</th><th>User</th><th>Language</th><th>Voice</th><th>Chars</th><th>Status</th><th>Text</th></tr>
           </thead>
           <tbody id="history-body"></tbody>
         </table>
       </div>
-      <p class="hint" id="history-empty" hidden>No TTS history yet.</p>
+      <p class="empty-state" id="history-empty" hidden>No TTS history yet.</p>
     </section>
   </main>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/config.js"></script>
   <script src="js/supabaseClient.js"></script>
