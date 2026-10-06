@@ -30,6 +30,8 @@ const VOICES: Record<string, { voiceId: string; voiceName: string }> = {
 const ALLOWED_ORIGINS = [
   "http://localhost:8000",
   "http://127.0.0.1:8000",
+  "http://localhost:5500", // VS Code Live Server
+  "http://127.0.0.1:5500", // VS Code Live Server
   "https://fangyuan143777-spec.github.io",
 ];
 
