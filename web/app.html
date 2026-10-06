@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App - TTS Project</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<!-- hidden until auth.js confirms there is a valid, enabled session -->
+<body data-page="app" hidden>
+  <main class="card">
+    <h1>TTS Project</h1>
+    <p>You are logged in.</p>
+    <p>Email: <strong id="user-email"></strong><br>Role: <strong id="user-role"></strong></p>
+    <p><em>Phase 1 placeholder: the text-to-speech page comes in a later phase.</em></p>
+    <button id="logout-btn" type="button">Log out</button>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabaseClient.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
