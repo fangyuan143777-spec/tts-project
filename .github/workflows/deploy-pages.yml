@@ -1,0 +1,47 @@
+# Publishes the contents of the web/ folder (and nothing else) to GitHub Pages.
+# The site is plain HTML/CSS/JavaScript, so there is no build step.
+#
+# One-time setup in GitHub: Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+# The minimum permissions the official Pages actions need.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one deployment at a time; a running deployment is allowed to finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up GitHub Pages
+        uses: actions/configure-pages@v6
+
+      # Only web/ is uploaded, so index.html ends up at the site root and
+      # README.md, supabase/ and the rest of the repository are NOT published.
+      - name: Upload the web/ folder
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: web
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
