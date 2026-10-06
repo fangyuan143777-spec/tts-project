@@ -2,7 +2,7 @@
 
 A school project: a web app where registered users turn text into speech using the ElevenLabs API, with an administrator dashboard for the professor.
 
-## Current status: Phase 3 (admin dashboard) in review
+## Current status: Phase 4 (appearance and accessibility) in review
 
 Done in Phase 1:
 - Supabase database: `profiles` and `tts_requests` tables, signup trigger, Row Level Security
@@ -19,7 +19,12 @@ Done in Phase 3:
 - `admin.html`: admin dashboard with statistics (total users, total generations, generations today (UTC), total characters, failed generations), a list of registered users with Enable/Disable buttons, and the latest 100 TTS records from all users (with a "View text" toggle)
 - Only admins can open it; normal users are sent back to `app.html`, and visitors who are not logged in are sent to the login page
 
-Not built yet (later phases): appearance settings (dark mode, font size/type), deployment.
+Done in Phase 4:
+- An **Appearance** panel on every page (login, register, app, admin): Light/Dark theme, font size (Small 90%, Medium 100%, Large 115%) and font (System, Serif, Monospace)
+- With no saved choice the site follows your operating system's light/dark setting; once you choose, your choice is remembered
+- Choices are saved only in your browser (`localStorage` keys `tts_theme`, `tts_font_size`, `tts_font_family`). Nothing is stored in Supabase
+
+Not built yet (later phases): deployment (GitHub Pages).
 
 ## Technology
 
@@ -42,6 +47,9 @@ Browser (web/*.html + js/)  --supabase-js-->  Supabase Auth  (login, session)
 
 ### Languages and voices
 One approved voice per language (English, Filipino, Spanish, Japanese, Chinese). The list is in `web/js/config.js` (for the dropdowns) and again in `supabase/functions/generate-speech/index.ts` (the server validates it and does not trust the browser). To change a voice, edit both files and redeploy the function. Text is spoken as typed; nothing is translated.
+
+### Appearance settings
+`web/css/style.css` keeps all colors in CSS variables at the top (`:root` for light, `html[data-theme="dark"]` for dark). `web/js/appearance.js` is loaded in the `<head>` of every page, so the saved settings are applied before the page is drawn (no flash). It sets `data-theme`, `data-font-size` and `data-font` on `<html>`, and the CSS reacts to those. To change a color, edit the variables only.
 
 ### Audio is not stored
 The browser plays and downloads a temporary copy. History keeps text and details only, so old audio cannot be replayed after a reload; generate it again.
@@ -94,6 +102,7 @@ web/
   js/auth.js               register / login / logout / page protection
   js/tts.js                language/voice, generate, player, download, history
   js/admin.js              admin statistics, users, all history
+  js/appearance.js         theme, font size and font settings (all pages)
 supabase/
   migrations/              database SQL
   functions/generate-speech/index.ts   the Edge Function

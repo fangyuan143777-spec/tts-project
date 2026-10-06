@@ -1,18 +1,92 @@
+/* ---- Theme (Phase 4) ----
+   All colors live here as CSS variables. appearance.js sets
+   <html data-theme="light|dark" data-font-size="..." data-font="..."> and the rules
+   below react to those attributes. To change a color, change it here only. */
+:root {
+  color-scheme: light;
+  --bg: #f4f6f8;            /* page background */
+  --surface: #ffffff;       /* cards */
+  --surface-alt: #f4f6f8;   /* panels inside a card (stat cards, appearance panel) */
+  --text: #1c1e21;
+  --muted: #555a64;
+  --border: #dde;           /* section dividers */
+  --table-border: #e1e4ea;
+  --input-bg: #ffffff;
+  --input-border: #7a8190;
+  --primary: #2457c5;       /* main buttons */
+  --on-primary: #ffffff;    /* text on buttons */
+  --secondary: #565f6d;     /* secondary buttons */
+  --danger: #b3261e;        /* "Disable" button */
+  --link: #1d4fb8;
+  --success-bg: #e6f4ea;
+  --success-text: #1e5c2e;
+  --error-bg: #fde8e8;
+  --error-text: #8a1c1c;
+  --focus: #0b57d0;         /* keyboard focus outline */
+  --shadow: rgba(0, 0, 0, 0.15);
+  --font-body: system-ui, sans-serif;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0f1318;
+  --surface: #1a2028;
+  --surface-alt: #232b35;
+  --text: #e8ebef;
+  --muted: #aab3bf;
+  --border: #333d49;
+  --table-border: #2c3540;
+  --input-bg: #11161c;
+  --input-border: #738096;
+  --primary: #3465cf;
+  --on-primary: #ffffff;
+  --secondary: #4a5361;
+  --danger: #c0372e;
+  --link: #8ab4ff;
+  --success-bg: #15321f;
+  --success-text: #86e0a3;
+  --error-bg: #3d1a17;
+  --error-text: #ffb3ab;
+  --focus: #8ab4ff;
+  --shadow: rgba(0, 0, 0, 0.6);
+}
+
+/* Font size: every size in this file uses rem, so changing the root size scales the whole page. */
+html { font-size: 100%; }
+html[data-font-size="small"] { font-size: 90%; }
+html[data-font-size="large"] { font-size: 115%; }
+
+/* Font type: three readable system font stacks (nothing is downloaded). */
+html[data-font="serif"] { --font-body: Georgia, "Times New Roman", Times, serif; }
+html[data-font="mono"] { --font-body: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+
+/* ---- Base ---- */
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: system-ui, sans-serif;
-  background: #f4f6f8;
-  color: #1c1e21;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
   line-height: 1.5;
 }
+input, button, select, textarea { font-family: inherit; }
+a { color: var(--link); }
+::placeholder { color: var(--muted); opacity: 1; }
+
+/* Visible keyboard focus on everything you can tab to. */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible,
+textarea:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
 .card {
   max-width: 400px;
   margin: 8vh auto;
   padding: 24px;
-  background: #fff;
+  background: var(--surface);
   border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 4px var(--shadow);
 }
 h1 { margin-top: 0; font-size: 1.5rem; }
 label { display: block; margin: 12px 0 4px; font-weight: 600; }
@@ -20,29 +94,34 @@ input {
   width: 100%;
   padding: 10px;
   font-size: 1rem;
-  border: 1px solid #aab;
+  color: var(--text);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 4px;
 }
 button {
   margin-top: 16px;
   padding: 10px 16px;
   font-size: 1rem;
-  color: #fff;
-  background: #2457c5;
+  color: var(--on-primary);
+  background: var(--primary);
   border: 0;
   border-radius: 4px;
   cursor: pointer;
 }
 button:disabled { opacity: 0.6; cursor: wait; }
+/* Messages have an icon as well as a color, so meaning is not color-only. */
 .message { padding: 10px; border-radius: 4px; margin-bottom: 8px; }
-.message.error { background: #fde8e8; color: #8a1c1c; }
-.message.ok { background: #e6f4ea; color: #1e5c2e; }
+.message.error { background: var(--error-bg); color: var(--error-text); }
+.message.error::before { content: "\26A0\FE0F  "; }
+.message.ok { background: var(--success-bg); color: var(--success-text); }
+.message.ok::before { content: "\2713  "; }
 .switch { margin-top: 16px; font-size: 0.95rem; }
 
 /* ---- App page (Phase 2) ---- */
 .card.wide { max-width: 820px; margin: 4vh auto; }
 h2 { font-size: 1.15rem; margin: 24px 0 8px; }
-section { border-top: 1px solid #dde; margin-top: 8px; }
+section { border-top: 1px solid var(--border); margin-top: 8px; }
 .topbar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
 .topbar h1 { margin: 0; }
 .userbox { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.95rem; }
@@ -53,48 +132,73 @@ select, textarea {
   width: 100%;
   padding: 10px;
   font: inherit;
-  border: 1px solid #aab;
+  color: var(--text);
+  border: 1px solid var(--input-border);
   border-radius: 4px;
-  background: #fff;
+  background: var(--input-bg);
 }
 textarea { resize: vertical; min-height: 120px; }
-.counter { margin: 4px 0 0; font-size: 0.9rem; color: #555; }
-.counter.over { color: #8a1c1c; font-weight: 600; }
+.counter { margin: 4px 0 0; font-size: 0.9rem; color: var(--muted); }
+.counter.over { color: var(--error-text); font-weight: 600; }
+.counter.over::after { content: " (too long)"; }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .actions button, .actions .button { margin-top: 12px; }
 a.button {
   display: inline-block;
   padding: 10px 16px;
   font-size: 1rem;
-  color: #fff;
-  background: #2457c5;
+  color: var(--on-primary);
+  background: var(--primary);
   border-radius: 4px;
   text-decoration: none;
 }
-button.secondary, a.button.secondary { background: #5b6472; }
+button.secondary, a.button.secondary { background: var(--secondary); }
 a.button[hidden] { display: none; }
 .volume { margin-top: 12px; max-width: 320px; }
 .volume input { padding: 0; }
-.hint { font-size: 0.9rem; color: #555; margin: 8px 0; }
+.hint { font-size: 0.9rem; color: var(--muted); margin: 8px 0; }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid #e1e4ea; vertical-align: top; }
-td.ok { color: #1e5c2e; font-weight: 600; }
-td.bad { color: #8a1c1c; font-weight: 600; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--table-border); vertical-align: top; }
+td.ok { color: var(--success-text); font-weight: 600; }
+td.bad { color: var(--error-text); font-weight: 600; }
+
 /* ---- Admin dashboard (Phase 3) ---- */
 .card.admin { max-width: 1000px; margin: 4vh auto; }
-.nav { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 12px 0; padding: 8px 0; border-top: 1px solid #dde; border-bottom: 1px solid #dde; }
-.nav a { color: #2457c5; text-decoration: none; font-weight: 600; }
+.nav { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 12px 0; padding: 8px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.nav a { color: var(--link); text-decoration: none; font-weight: 600; }
 .nav a:hover { text-decoration: underline; }
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-.stat { display: flex; flex-direction: column; padding: 14px; background: #f4f6f8; border: 1px solid #dde; border-radius: 6px; }
+.stat { display: flex; flex-direction: column; padding: 14px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 6px; }
 .stat-number { font-size: 1.6rem; font-weight: 700; }
-.stat-label { font-size: 0.85rem; color: #555; }
+.stat-label { font-size: 0.85rem; color: var(--muted); }
 button.small { margin-top: 0; padding: 4px 10px; font-size: 0.9rem; }
-button.danger { background: #b3261e; }
-.note { font-weight: 400; font-size: 0.8rem; color: #8a1c1c; }
-details summary { cursor: pointer; color: #2457c5; }
+button.danger { background: var(--danger); }
+.note { font-weight: 400; font-size: 0.8rem; color: var(--error-text); }
+details summary { cursor: pointer; color: var(--link); }
 .full-text { margin-top: 4px; max-width: 340px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* ---- Appearance panel (Phase 4) ---- */
+.appearance { margin: 12px 0; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 6px; }
+.appearance > summary { padding: 8px 12px; font-weight: 600; }
+.appearance-body { display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 4px 12px 12px; }
+.appearance-group { display: flex; flex-direction: column; gap: 4px; }
+.appearance-group label, .appearance-label { margin: 0; font-size: 0.9rem; font-weight: 600; }
+.appearance select { width: auto; min-width: 11rem; }
+.seg { display: inline-flex; }
+.seg button {
+  margin-top: 0;
+  padding: 6px 12px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--input-border);
+  border-radius: 0;
+}
+.seg button:first-child { border-radius: 4px 0 0 4px; }
+.seg button:last-child { border-radius: 0 4px 4px 0; }
+.seg button + button { margin-left: -1px; }
+.seg button[aria-pressed="true"] { color: var(--on-primary); background: var(--primary); border-color: var(--primary); }
+.seg button[aria-pressed="true"]::before { content: "\2713  "; }
 
 @media (max-width: 480px) {
   .card, .card.wide, .card.admin { margin: 0; border-radius: 0; }
