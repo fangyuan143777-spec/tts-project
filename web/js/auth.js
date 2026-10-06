@@ -104,6 +104,7 @@ async function initProtectedPage() {
   document.getElementById("user-role").textContent = profile.role;
   document.getElementById("logout-btn").addEventListener("click", () => signOutAndRedirect(null));
   document.body.hidden = false; // show the page only after the checks pass
+  document.dispatchEvent(new Event("app-ready")); // lets tts.js start (e.g. load history)
 
   // If the session ends elsewhere (other tab, expiry), leave the page.
   sb.auth.onAuthStateChange((event) => {
