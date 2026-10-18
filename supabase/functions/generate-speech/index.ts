@@ -16,13 +16,54 @@ const DAILY_LIMIT = 20; // successful generations per user per UTC day
 const MODEL_ID = "eleven_multilingual_v2";
 const OUTPUT_FORMAT = "mp3_44100_128";
 
-// language code -> the one approved voice
-const VOICES: Record<string, { voiceId: string; voiceName: string }> = {
-  en: { voiceId: "Xb7hH8MSUJpSbSDYk0k2", voiceName: "Alice - Clear, Engaging Educator" },
-  fil: { voiceId: "IKne3meq5aSn9XLyUdCD", voiceName: "Charlie - Deep, Confident, Energetic" },
-  es: { voiceId: "CwhRBWXzGAHq8TQ4Fs17", voiceName: "Roger - Laid-Back, Casual, Resonant" },
-  ja: { voiceId: "JBFqnCBsd6RMkjVDRZzb", voiceName: "George - Warm, Captivating Storyteller" },
-  zh: { voiceId: "EXAVITQu4vr4xnSDxMaL", voiceName: "Sarah - Mature, Reassuring, Confident" },
+// language code -> the approved voices for that language (the first one is the page's default)
+const VOICES: Record<string, { voiceId: string; voiceName: string }[]> = {
+  en: [
+    { voiceId: "Xb7hH8MSUJpSbSDYk0k2", voiceName: "Alice - Clear, Engaging Educator" },
+    { voiceId: "onwK4e9ZLuTAKqWW03F9", voiceName: "Daniel - Steady Broadcaster" },
+    { voiceId: "cgSgspJ2msm6clMCkdW9", voiceName: "Jessica - Playful, Bright, Warm" },
+    { voiceId: "nPczCjzI2devNBz1zQrb", voiceName: "Brian - Deep, Resonant and Comforting" },
+  ],
+  fil: [
+    { voiceId: "IKne3meq5aSn9XLyUdCD", voiceName: "Charlie - Deep, Confident, Energetic" },
+    { voiceId: "JBFqnCBsd6RMkjVDRZzb", voiceName: "George - Warm, Captivating Storyteller" },
+    { voiceId: "bIHbv24MWmeRgasZH58o", voiceName: "Will - Relaxed Optimist" },
+  ],
+  es: [
+    { voiceId: "CwhRBWXzGAHq8TQ4Fs17", voiceName: "Roger - Laid-Back, Casual, Resonant" },
+    { voiceId: "XrExE9yKIg1WjnnlVkGX", voiceName: "Matilda - Knowledgable, Professional" },
+    { voiceId: "cjVigY5qzO86Huf0OWal", voiceName: "Eric - Smooth, Trustworthy" },
+  ],
+  ja: [
+    { voiceId: "JBFqnCBsd6RMkjVDRZzb", voiceName: "George - Warm, Captivating Storyteller" },
+    { voiceId: "Xb7hH8MSUJpSbSDYk0k2", voiceName: "Alice - Clear, Engaging Educator" },
+    { voiceId: "cgSgspJ2msm6clMCkdW9", voiceName: "Jessica - Playful, Bright, Warm" },
+  ],
+  zh: [
+    { voiceId: "EXAVITQu4vr4xnSDxMaL", voiceName: "Sarah - Mature, Reassuring, Confident" },
+    { voiceId: "nPczCjzI2devNBz1zQrb", voiceName: "Brian - Deep, Resonant and Comforting" },
+    { voiceId: "pFZP5JQG7iQjIQuC4Bku", voiceName: "Lily - Velvety Actress" },
+  ],
+  fr: [
+    { voiceId: "Xb7hH8MSUJpSbSDYk0k2", voiceName: "Alice - Clear, Engaging Educator" },
+    { voiceId: "cjVigY5qzO86Huf0OWal", voiceName: "Eric - Smooth, Trustworthy" },
+    { voiceId: "XrExE9yKIg1WjnnlVkGX", voiceName: "Matilda - Knowledgable, Professional" },
+  ],
+  de: [
+    { voiceId: "onwK4e9ZLuTAKqWW03F9", voiceName: "Daniel - Steady Broadcaster" },
+    { voiceId: "pFZP5JQG7iQjIQuC4Bku", voiceName: "Lily - Velvety Actress" },
+    { voiceId: "cjVigY5qzO86Huf0OWal", voiceName: "Eric - Smooth, Trustworthy" },
+  ],
+  pt: [
+    { voiceId: "nPczCjzI2devNBz1zQrb", voiceName: "Brian - Deep, Resonant and Comforting" },
+    { voiceId: "iP95p4xoKVk53GoZ742B", voiceName: "Chris - Charming, Down-to-Earth" },
+    { voiceId: "SAz9YHcvj6GT2YYXdXww", voiceName: "River - Relaxed, Neutral, Informative" },
+  ],
+  it: [
+    { voiceId: "Xb7hH8MSUJpSbSDYk0k2", voiceName: "Alice - Clear, Engaging Educator" },
+    { voiceId: "XrExE9yKIg1WjnnlVkGX", voiceName: "Matilda - Knowledgable, Professional" },
+    { voiceId: "SAz9YHcvj6GT2YYXdXww", voiceName: "River - Relaxed, Neutral, Informative" },
+  ],
 };
 
 // Websites allowed to call this function from a browser.
@@ -110,8 +151,11 @@ Deno.serve(async (req: Request) => {
   if (typeof language !== "string" || !Object.hasOwn(VOICES, language)) {
     return jsonError(400, "Unsupported language.", cors);
   }
-  const approved = VOICES[language];
-  if (typeof voice !== "string" || voice !== approved.voiceId) {
+  // The voice must be one of the voices approved for THIS language (the browser is not trusted).
+  const approved = typeof voice === "string"
+    ? VOICES[language].find((v) => v.voiceId === voice)
+    : undefined;
+  if (!approved) {
     return jsonError(400, "That voice is not available for the selected language.", cors);
   }
 

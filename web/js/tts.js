@@ -54,14 +54,16 @@
     showVoice();
   }
 
-  // One approved voice per language, so the voice list is just that voice.
+  // Show only the voices approved for the chosen language. The first one is selected by default.
   function showVoice() {
     const lang = selectedLanguage();
     voiceSelect.replaceChildren();
-    const option = document.createElement("option");
-    option.value = lang.voiceId;
-    option.textContent = lang.voiceName;
-    voiceSelect.appendChild(option);
+    lang.voices.forEach((voice) => {
+      const option = document.createElement("option");
+      option.value = voice.id;
+      option.textContent = voice.name;
+      voiceSelect.appendChild(option);
+    });
   }
 
   // ---- Counter and Generate button -----------------------------------------

@@ -46,7 +46,7 @@ Browser (web/*.html + js/)  --supabase-js-->  Supabase Auth  (login, session)
 ```
 
 ### Languages and voices
-One approved voice per language (English, Filipino, Spanish, Japanese, Chinese). The list is in `web/js/config.js` (for the dropdowns) and again in `supabase/functions/generate-speech/index.ts` (the server validates it and does not trust the browser). To change a voice, edit both files and redeploy the function. Text is spoken as typed; nothing is translated.
+Nine languages (English, Filipino, Spanish, Japanese, Chinese, French, German, Portuguese (Brazil), Italian), with 3 approved voices each (4 for English). The first voice of each language is the default. The list is in `web/js/config.js` (for the dropdowns) and again in `supabase/functions/generate-speech/index.ts` (the server only accepts voices approved for the chosen language and does not trust the browser). To change a voice, edit both files and redeploy the function. Text is spoken as typed; nothing is translated.
 
 ### Appearance settings
 `web/css/style.css` keeps all colors in CSS variables at the top (`:root` for light, `html[data-theme="dark"]` for dark). `web/js/appearance.js` is loaded in the `<head>` of every page, so the saved settings are applied before the page is drawn (no flash). It sets `data-theme`, `data-font-size` and `data-font` on `<html>`, and the CSS reacts to those. To change a color, edit the variables only.

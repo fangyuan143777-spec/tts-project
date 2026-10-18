@@ -64,3 +64,6 @@ desktop.ini
 
 # Claude Code local settings (including temporary variants like settings.local.json.tmp.123.abc)
 .claude/settings.local.json*
+
+# Local ElevenLabs voice list for this account (a working file, not part of the project)
+default_voices.json
