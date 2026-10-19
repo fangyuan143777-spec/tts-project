@@ -1,14 +1,51 @@
 // Registration, login, logout and page protection.
 // Each page sets <body data-page="login|register|app"> and this file does the right thing.
 
-const DISABLED_MESSAGE = "Your account has been disabled. Please contact the administrator.";
+const DISABLED_MESSAGE =
+  "Your account has been disabled. If you believe this is a mistake, please contact the administrator for assistance.";
+
+// Details for the "Contact Administrator" link (shown only together with the disabled-account message).
+const ADMIN_EMAIL = "fangyuan143777@gmail.com";
+const CONTACT_SUBJECT = "Sonara Voice - Account Access Request";
+const CONTACT_BODY = [
+  "Hello Administrator,",
+  "I am unable to access my Sonara Voice account because it has been disabled. Could you please review my account and let me know if access can be restored?",
+  "Thank you.",
+].join("\r\n"); // \r\n is the standard line break for email drafts
 
 function showMessage(text, isError) {
+  // The contact link belongs only to the disabled-account message, so hide it for every other message.
+  const contact = document.getElementById("contact-admin");
+  if (contact) contact.hidden = true;
+
   const box = document.getElementById("message");
   if (!box) return;
   box.textContent = text; // textContent, never innerHTML
   box.className = isError ? "message error" : "message ok";
   box.hidden = false;
+}
+
+// The disabled-account message plus a "Contact Administrator" link.
+// The link is a plain mailto: link: it only opens a prefilled draft in the user's own mail app.
+// This page sends nothing; the user reads the draft and presses Send themselves.
+function showDisabledMessage() {
+  showMessage(DISABLED_MESSAGE, true);
+
+  const contact = document.getElementById("contact-admin");
+  const link = document.getElementById("contact-admin-link");
+  if (!contact || !link) return; // this page has no contact block
+
+  // encodeURIComponent makes spaces, commas and line breaks safe inside the link.
+  link.href =
+    "mailto:" + ADMIN_EMAIL +
+    "?subject=" + encodeURIComponent(CONTACT_SUBJECT) +
+    "&body=" + encodeURIComponent(CONTACT_BODY);
+
+  // Also show the plain address, for computers that have no default mail app.
+  const address = document.getElementById("contact-admin-address");
+  if (address) address.textContent = ADMIN_EMAIL;
+
+  contact.hidden = false;
 }
 
 // Read the signed-in user's own profile row (RLS only lets them see their own).
@@ -38,7 +75,7 @@ async function finishSignIn(user) {
   }
   if (profile.is_disabled) {
     await sb.auth.signOut();
-    showMessage(DISABLED_MESSAGE, true);
+    showDisabledMessage();
     return;
   }
   window.location.replace("app.html");
@@ -47,7 +84,7 @@ async function finishSignIn(user) {
 // ---- Login / register pages -------------------------------------------------
 async function initAuthPage(page) {
   const reason = new URLSearchParams(window.location.search).get("reason");
-  if (reason === "disabled") showMessage(DISABLED_MESSAGE, true);
+  if (reason === "disabled") showDisabledMessage();
   if (reason === "profile") showMessage("Could not load your profile. Please log in again.", true);
 
   // Already signed in? Skip the login/register page.

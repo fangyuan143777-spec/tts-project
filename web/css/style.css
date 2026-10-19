@@ -159,6 +159,7 @@ td.ok::before, td.bad::before,
 .i-arrow-left { --ico: url("../img/icons/arrow-left.svg"); }
 .i-grid { --ico: url("../img/icons/grid.svg"); }
 .i-alert { --ico: url("../img/icons/alert.svg"); }
+.i-mail { --ico: url("../img/icons/mail.svg"); }
 
 /* ---- 5. Buttons, forms, messages ------------------------------------------- */
 button, a.button {
@@ -408,6 +409,10 @@ textarea { display: block; resize: vertical; min-height: 12rem; padding: 1rem; f
 .auth-card .subtle { margin-bottom: 1.5rem; }
 .auth-card .field { margin-top: 1rem; }
 .switch { margin: 1.25rem 0 0; font-size: 0.95rem; text-align: center; }
+/* Contact block shown with the disabled-account message (login and register pages) */
+.contact-help { margin: 0.75rem 0 0; }
+.contact-help a.button { width: 100%; }
+.contact-help .hint { margin: 0.5rem 0 0; text-align: center; overflow-wrap: anywhere; }
 .auth-card .appearance-slot { margin-top: 2rem; }
 
 /* ---- 7. App page ----------------------------------------------------------- */
